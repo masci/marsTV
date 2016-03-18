@@ -2,6 +2,7 @@ package com.example.massi.marstv;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -25,7 +26,7 @@ import java.util.List;
  * helper methods.
  */
 public class PostMetrics extends IntentService {
-    String broker = "tcp://test.mosquitto.org:1883";
+    String broker = "tcp://10.42.30.10:1883";
     String topic = "iot-dogstatsd";
 
     public PostMetrics() {
@@ -37,8 +38,11 @@ public class PostMetrics extends IntentService {
 
         Runtime r = Runtime.getRuntime();
 
-        metrics.add(String.format("free_memory:%d|g", r.freeMemory()));
-        metrics.add(String.format("cpu_usage:%.2f|g", cpuUsage()));
+        metrics.add("_sc|tv_is_on|0|#host:marsTV");
+        metrics.add(String.format("free_memory:%d|g|#host:marsTV", r.freeMemory()));
+        metrics.add(String.format("cpu_usage:%.2f|g|#host:marsTV", cpuUsage()));
+        metrics.add(String.format("bytes_rcvd:%d|g|#host:marsTV", TrafficStats.getTotalRxBytes()));
+        metrics.add(String.format("bytes_sent:%d|g|#host:marsTV", TrafficStats.getTotalTxBytes()));
 
         return android.text.TextUtils.join("\n", metrics);
     }
