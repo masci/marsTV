@@ -14,6 +14,7 @@ public class MainActivity extends Activity {
         Log.e("MainActivity", "HERE");
         Intent startServiceIntent = new Intent(getApplicationContext(), PostMetrics.class);
         getApplicationContext().startService(startServiceIntent);
+        finish();
     }
 
 }
