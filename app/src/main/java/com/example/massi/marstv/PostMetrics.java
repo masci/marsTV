@@ -26,7 +26,8 @@ import java.util.List;
  * helper methods.
  */
 public class PostMetrics extends IntentService {
-    String broker = "tcp://10.42.30.10:1883";
+    String broker = "tcp://82.196.2.189:1883";
+    //String broker = "tcp://test.mosquitto.org:1883";
     String topic = "iot-dogstatsd";
 
     public PostMetrics() {
@@ -39,10 +40,10 @@ public class PostMetrics extends IntentService {
         Runtime r = Runtime.getRuntime();
 
         metrics.add("_sc|tv_is_on|0|#host:marsTV");
-        metrics.add(String.format("free_memory:%d|g|#host:marsTV", r.freeMemory()));
-        metrics.add(String.format("cpu_usage:%.2f|g|#host:marsTV", cpuUsage()));
-        metrics.add(String.format("bytes_rcvd:%d|g|#host:marsTV", TrafficStats.getTotalRxBytes()));
-        metrics.add(String.format("bytes_sent:%d|g|#host:marsTV", TrafficStats.getTotalTxBytes()));
+        metrics.add(String.format("mqtt.free_memory:%d|g|#host:marsTV", r.freeMemory()));
+        metrics.add(String.format("mqtt.cpu_usage:%.2f|g|#host:marsTV", cpuUsage()));
+        metrics.add(String.format("mqtt.bytes_rcvd:%d|g|#host:marsTV", TrafficStats.getTotalRxBytes()));
+        metrics.add(String.format("mqtt.bytes_sent:%d|g|#host:marsTV", TrafficStats.getTotalTxBytes()));
 
         return android.text.TextUtils.join("\n", metrics);
     }
